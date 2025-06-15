@@ -1,0 +1,17 @@
+Export the Express application from the app.js file.
+Grading: You will earn 20 points for each of the following
+• Correct setup of the Express application.
+• Correct implementation and design of the GET route and the landing page.
+• Correct implementation of error handling middleware.
+This assignment is worth a total of 60 points. If two tasks are completed correctly, you will
+earn 40 points.
+Hints:
+• For setting up the Express application, remember to require the Express module and
+call it as a function.
+• When creating the GET route, remember that the route handler methods (like GET)
+take a path and a callback function as arguments.
+• For the middleware functions, you can use app.use(). The middleware function for
+handling 404 errors should be added after all other routes.
+• In the 500 error middleware, you can set the status code using req.status(). To
+return a JSON response, you can use res.json().
+• Don’t forget to export the Express application at the end of the app.js file.
