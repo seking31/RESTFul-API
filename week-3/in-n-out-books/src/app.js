@@ -20,9 +20,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
-app.use("/books", booksRouter);
+app.use("/api", booksRouter);
 
-app.set("views", path.join(__dirname, "../views")); // path to your views
+app.set("views", path.join(__dirname, "../views"));
 app.set("view engine", "ejs");
 
 module.exports = app;
