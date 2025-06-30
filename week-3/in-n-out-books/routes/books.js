@@ -28,9 +28,6 @@ router.get("/books/:id", async (req, res) => {
 
     const book = await books.findOne({ id });
 
-    console.log({ book });
-    console.log({ id });
-
     res.json(book);
   } catch (error) {
     console.log({ error });
@@ -38,6 +35,49 @@ router.get("/books/:id", async (req, res) => {
       return res.status(404).json({ error: "Not found" });
     }
     res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// POST new book
+router.post("/books", async (req, res, next) => {
+  try {
+    const { title, author } = req.body;
+
+    if (!title) {
+      return res.status(400).json({ message: "Book title is required." });
+    }
+
+    const newBook = {
+      id: crypto.randomUUID(),
+      title,
+      author: author,
+    };
+
+    books.insertOne(newBook);
+
+    res.status(201).json(newBook);
+  } catch (err) {
+    console.error("Error adding book: ", err.message);
+    next(err);
+  }
+});
+
+// DELETE book
+router.delete("/books/:id", async (req, res, next) => {
+  try {
+    const id = Number(req.params.id);
+    if (isNaN(id)) {
+      return res.status(400).json({ error: "Invalid ID" });
+    }
+
+    const book = await books.deleteOne({ id });
+
+    res.json(book);
+
+    res.status(204).send();
+  } catch (err) {
+    console.error("Error deleting book: ", err.message);
+    next(err);
   }
 });
 
