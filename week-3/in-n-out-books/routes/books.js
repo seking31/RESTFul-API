@@ -48,7 +48,7 @@ router.post("/books", async (req, res, next) => {
     }
 
     const newBook = {
-      id: crypto.randomUUID(),
+      id: Math.random(),
       title,
       author: author,
     };
@@ -78,6 +78,34 @@ router.delete("/books/:id", async (req, res, next) => {
   } catch (err) {
     console.error("Error deleting book: ", err.message);
     next(err);
+  }
+});
+
+router.put("/books/:id", async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    if (isNaN(id)) {
+      return res
+        .status(400)
+        .json({ error: "Invalid ID: ID must be a number." });
+    }
+
+    const { title, author } = req.body;
+
+    if (!title) {
+      return res.status(400).json({ error: "Missing book title." });
+    }
+
+    const updatedBook = {
+      title,
+      author,
+    };
+
+    await books.updateOne({ id }, updatedBook);
+    res.status(204).send();
+  } catch (error) {
+    console.error("Error updating book: ", error.message);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 

@@ -72,3 +72,45 @@ describe("Chapter 4: API Tests", () => {
     expect(deleteResponse.status).toBe(200);
   });
 });
+
+describe("Chapter 5: API Tests", () => {
+  let createdBookId;
+
+  beforeAll(async () => {
+    const response = await request(app)
+      .post("/api/books")
+      .send({ title: "Original Title", author: "Oliver Small" });
+
+    createdBookId = response.body.id;
+  });
+
+  test("Should update a book and return a 204-status code", async () => {
+    const response = await request(app)
+      .put(`/api/books/${createdBookId}`)
+      .send({ title: "Updated Title", author: "Oliver Small" });
+
+    expect(response.status).toBe(204);
+  });
+
+  test("Should return a 400-status code when using a non-numeric id", async () => {
+    const response = await request(app)
+      .put("/api/books/not-a-number")
+      .send({ title: "Some Title", author: "Benny Good" });
+
+    expect(response.status).toBe(400);
+    expect(response.body).toHaveProperty(
+      "error",
+      "Invalid ID: ID must be a number."
+    );
+  });
+
+  test("Should return a 400-status code when updating a book with a missing title", async () => {
+    console.log(typeof createdBookId);
+    const response = await request(app)
+      .put(`/api/books/${createdBookId}`)
+      .send({ author: "Jane Smith" });
+
+    expect(response.status).toBe(400);
+    expect(response.body).toHaveProperty("error", "Missing book title.");
+  });
+});
