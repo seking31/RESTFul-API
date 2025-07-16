@@ -12,6 +12,7 @@ const app = express();
 
 var indexRouter = require("../routes/index");
 var booksRouter = require("../routes/books");
+var userRouter = require("../routes/users");
 
 app.use(logger("dev"));
 app.use(express.json());
@@ -21,6 +22,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/api", booksRouter);
+app.use("/api/users", userRouter);
 
 app.set("views", path.join(__dirname, "../views"));
 app.set("view engine", "ejs");
